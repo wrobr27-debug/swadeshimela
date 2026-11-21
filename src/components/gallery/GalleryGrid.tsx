@@ -1,32 +1,51 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { galleries } from "@/config/galleries";
 import { GalleryCard } from "@/components/gallery/GalleryCard";
 import { isValidUrl } from "@/lib/utils";
+import type { Gallery } from "@/types/gallery";
 
 /** Returns today's date string in IST (UTC+5:30) as "YYYY-MM-DD" */
 function getTodayIST(): string {
   const now = new Date();
-  // Add IST offset: 5h 30m = 330 minutes
-  const istOffset = 330 * 60 * 1000;
+  const istOffset = 330 * 60 * 1000; // 5h 30m in ms
   const istNow = new Date(now.getTime() + istOffset);
   return istNow.toISOString().split("T")[0];
 }
 
-/** A day should be visible if its startDate is <= today (IST) */
-function hasOccurred(startDate: string): boolean {
-  return startDate <= getTodayIST();
-}
-
 export function GalleryGrid() {
-  const today = getTodayIST();
+  // Keep date as state so it's only computed on the client, never during SSR prerender
+  const [todayIST, setTodayIST] = useState<string | null>(null);
 
-  const dayGalleries = galleries.filter(
-    (g) => g.id !== "all-photos" && hasOccurred(g.startDate)
+  useEffect(() => {
+    setTodayIST(getTodayIST());
+  }, []);
+
+  // During SSR / before hydration — show a subtle skeleton so layout doesn't jump
+  if (!todayIST) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {[1, 2].map((i) => (
+          <div
+            key={i}
+            className="rounded-2xl border border-[#C9A227]/20 bg-gradient-to-br from-[#2E0808]/60 to-[#1A0404]/80 aspect-[4/3] animate-pulse"
+          />
+        ))}
+      </div>
+    );
+  }
+
+  const dayGalleries: Gallery[] = galleries.filter(
+    (g) => g.id !== "all-photos" && g.startDate <= todayIST
+  );
+
+  const upcoming: Gallery[] = galleries.filter(
+    (g) => g.id !== "all-photos" && g.startDate > todayIST
   );
 
   const allPhotos = galleries.find((g) => g.id === "all-photos");
-  const showAllPhotos = allPhotos && hasOccurred(allPhotos.startDate);
+  const showAllPhotos = allPhotos && allPhotos.startDate <= todayIST;
 
   return (
     <div className="space-y-8">
@@ -46,31 +65,25 @@ export function GalleryGrid() {
       )}
 
       {/* Upcoming days teaser */}
-      {(() => {
-        const upcoming = galleries.filter(
-          (g) => g.id !== "all-photos" && !hasOccurred(g.startDate)
-        );
-        if (upcoming.length === 0) return null;
-        return (
-          <div className="border border-[#C9A227]/15 rounded-2xl p-5 bg-[#1A0404]/60">
-            <p className="text-[#C9A227] text-xs uppercase tracking-widest font-semibold mb-3 text-center">
-              Coming Up
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {upcoming.map((g) => (
-                <div
-                  key={g.id}
-                  className="flex items-center gap-2 bg-[#2E0808]/60 border border-[#C9A227]/15 rounded-full px-4 py-1.5"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]/40" />
-                  <span className="text-[#D4B896] text-xs font-medium">{g.title}</span>
-                  <span className="text-[#D4B896]/50 text-xs">· {g.date}</span>
-                </div>
-              ))}
-            </div>
+      {upcoming.length > 0 && (
+        <div className="border border-[#C9A227]/15 rounded-2xl p-5 bg-[#1A0404]/60">
+          <p className="text-[#C9A227] text-xs uppercase tracking-widest font-semibold mb-3 text-center">
+            Coming Up
+          </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {upcoming.map((g) => (
+              <div
+                key={g.id}
+                className="flex items-center gap-2 bg-[#2E0808]/60 border border-[#C9A227]/15 rounded-full px-4 py-1.5"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]/40" />
+                <span className="text-[#D4B896] text-xs font-medium">{g.title}</span>
+                <span className="text-[#D4B896]/50 text-xs">· {g.date}</span>
+              </div>
+            ))}
           </div>
-        );
-      })()}
+        </div>
+      )}
 
       {/* All Photos — only shown after Day 7 (Nov 27) */}
       {showAllPhotos && allPhotos && (
