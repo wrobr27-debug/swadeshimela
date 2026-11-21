@@ -1,6 +1,7 @@
 export interface Gallery {
   id: string;
   day: string;
+  startDate: string; // ISO date "YYYY-MM-DD" — used to auto-hide future days
   date: string;
   dayName: string;
   title: string;

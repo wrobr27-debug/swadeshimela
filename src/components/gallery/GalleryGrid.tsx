@@ -2,40 +2,91 @@
 
 import { galleries } from "@/config/galleries";
 import { GalleryCard } from "@/components/gallery/GalleryCard";
+import { isValidUrl } from "@/lib/utils";
+
+/** Returns today's date string in IST (UTC+5:30) as "YYYY-MM-DD" */
+function getTodayIST(): string {
+  const now = new Date();
+  // Add IST offset: 5h 30m = 330 minutes
+  const istOffset = 330 * 60 * 1000;
+  const istNow = new Date(now.getTime() + istOffset);
+  return istNow.toISOString().split("T")[0];
+}
+
+/** A day should be visible if its startDate is <= today (IST) */
+function hasOccurred(startDate: string): boolean {
+  return startDate <= getTodayIST();
+}
 
 export function GalleryGrid() {
-  // Show day galleries first, then the "All Photos" card last (featured)
-  const dayGalleries = galleries.filter((g) => g.id !== "all-photos");
+  const today = getTodayIST();
+
+  const dayGalleries = galleries.filter(
+    (g) => g.id !== "all-photos" && hasOccurred(g.startDate)
+  );
+
   const allPhotos = galleries.find((g) => g.id === "all-photos");
+  const showAllPhotos = allPhotos && hasOccurred(allPhotos.startDate);
 
   return (
     <div className="space-y-8">
-      {/* Day-wise cards grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {dayGalleries.map((gallery, i) => (
-          <GalleryCard key={gallery.id} gallery={gallery} index={i} />
-        ))}
-      </div>
+      {/* Day-wise cards */}
+      {dayGalleries.length === 0 ? (
+        <div className="text-center py-16 text-[#D4B896]">
+          <p className="text-4xl mb-3">📸</p>
+          <p className="font-devanagari text-lg">मेला अभी शुरू नहीं हुआ है</p>
+          <p className="text-sm mt-1">Galleries will appear as each day begins.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {dayGalleries.map((gallery, i) => (
+            <GalleryCard key={gallery.id} gallery={gallery} index={i} />
+          ))}
+        </div>
+      )}
 
-      {/* All Photos — full-width featured card */}
-      {allPhotos && (
+      {/* Upcoming days teaser */}
+      {(() => {
+        const upcoming = galleries.filter(
+          (g) => g.id !== "all-photos" && !hasOccurred(g.startDate)
+        );
+        if (upcoming.length === 0) return null;
+        return (
+          <div className="border border-[#C9A227]/15 rounded-2xl p-5 bg-[#1A0404]/60">
+            <p className="text-[#C9A227] text-xs uppercase tracking-widest font-semibold mb-3 text-center">
+              Coming Up
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {upcoming.map((g) => (
+                <div
+                  key={g.id}
+                  className="flex items-center gap-2 bg-[#2E0808]/60 border border-[#C9A227]/15 rounded-full px-4 py-1.5"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227]/40" />
+                  <span className="text-[#D4B896] text-xs font-medium">{g.title}</span>
+                  <span className="text-[#D4B896]/50 text-xs">· {g.date}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* All Photos — only shown after Day 7 (Nov 27) */}
+      {showAllPhotos && allPhotos && (
         <div className="mt-6">
-          <div className="relative rounded-2xl overflow-hidden border border-[#C9A227]/50 bg-gradient-to-r from-[#4A0E0E]/80 to-[#2E0808]/90 p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 group cursor-pointer hover:border-[#C9A227]/80 transition-all card-glow"
+          <div
+            className="relative rounded-2xl overflow-hidden border border-[#C9A227]/50 bg-gradient-to-r from-[#4A0E0E]/80 to-[#2E0808]/90 p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 group cursor-pointer hover:border-[#C9A227]/80 transition-all card-glow"
             onClick={() => {
-              if (allPhotos.driveUrl && allPhotos.driveUrl !== "#") {
+              if (isValidUrl(allPhotos.driveUrl)) {
                 window.open(allPhotos.driveUrl, "_blank", "noopener,noreferrer");
               }
             }}
           >
-            {/* Gold glow top */}
             <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#C9A227] to-transparent" />
-
-            {/* Star badge */}
-            <div className="shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#C9A227] to-[#E0B840] flex items-center justify-center text-3xl md:text-4xl shadow-xl shadow-[#C9A227]/20 group-hover:scale-110 transition-transform">
+            <div className="shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-[#C9A227] to-[#E0B840] flex items-center justify-center text-3xl shadow-xl shadow-[#C9A227]/20 group-hover:scale-110 transition-transform">
               ✦
             </div>
-
-            {/* Text */}
             <div className="flex-1 text-center md:text-left">
               <span className="inline-block bg-[#C9A227] text-[#1A0404] text-xs font-bold px-3 py-0.5 rounded-full mb-2">
                 Complete Collection
@@ -43,12 +94,8 @@ export function GalleryGrid() {
               <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#FFF8E7] mb-1 group-hover:text-[#F0CC5A] transition-colors">
                 All 7 Days — Every Moment
               </h3>
-              <p className="font-devanagari text-[#D4B896] text-sm">
-                {allPhotos.culturalProgram} · {allPhotos.date}
-              </p>
+              <p className="font-devanagari text-[#D4B896] text-sm">{allPhotos.date}</p>
             </div>
-
-            {/* CTA */}
             <div className="shrink-0">
               <div className="flex items-center gap-2 bg-[#C9A227] hover:bg-[#E0B840] text-[#1A0404] font-bold px-6 py-3 rounded-xl transition-colors">
                 <span>View All Photos</span>
