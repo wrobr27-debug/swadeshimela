@@ -13,24 +13,18 @@ export function GalleryCard({ gallery, index }: GalleryCardProps) {
   const hasLink = isValidUrl(gallery.driveUrl);
   const isAll = gallery.id === "all-photos";
 
-  const handleClick = () => {
-    if (hasLink) {
-      window.open(gallery.driveUrl, "_blank", "noopener,noreferrer");
+  const cardClasses = `group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 card-glow
+    ${isAll
+      ? "border-[#C9A227]/60 bg-gradient-to-br from-[#4A0E0E]/80 to-[#1A0404]/90"
+      : "border-[#C9A227]/25 bg-gradient-to-br from-[#2E0808]/80 to-[#1A0404]/90"
     }
-  };
+    ${hasLink
+      ? "cursor-pointer hover:-translate-y-1 hover:border-[#C9A227]/60"
+      : "cursor-default opacity-80"
+    }`;
 
-  return (
-    <article
-      className={`group relative flex flex-col rounded-2xl overflow-hidden border transition-all duration-300 card-glow
-        ${isAll
-          ? "border-[#C9A227]/60 bg-gradient-to-br from-[#4A0E0E]/80 to-[#1A0404]/90"
-          : "border-[#C9A227]/25 bg-gradient-to-br from-[#2E0808]/80 to-[#1A0404]/90"
-        }
-        ${hasLink ? "cursor-pointer hover:-translate-y-1 hover:border-[#C9A227]/60" : "cursor-default opacity-80"}
-      `}
-      onClick={handleClick}
-      style={{ animationDelay: `${index * 80}ms` }}
-    >
+  const inner = (
+    <>
       {/* ── Day Visual (text-based, no image) ── */}
       <div
         className={`relative w-full aspect-[4/3] flex flex-col items-center justify-center overflow-hidden
@@ -159,6 +153,33 @@ export function GalleryCard({ gallery, index }: GalleryCardProps) {
 
       {/* Top glow on hover */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C9A227] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    </>
+  );
+
+  // Render as a native <a> link when Drive URL is valid — full card is clickable
+  // Supports right-click → open in new tab, middle-click, keyboard navigation
+  if (hasLink) {
+    return (
+      <a
+        href={gallery.driveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cardClasses}
+        style={{ animationDelay: `${index * 80}ms` }}
+        aria-label={`View ${gallery.title} photos on Google Drive`}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <article
+      className={cardClasses}
+      style={{ animationDelay: `${index * 80}ms` }}
+      aria-label={`${gallery.title} — photos coming soon`}
+    >
+      {inner}
     </article>
   );
 }
