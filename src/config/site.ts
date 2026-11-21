@@ -16,7 +16,7 @@ export const siteConfig = {
   localNews: {
     name: "Local News Bilaspur",
     tagline: "बिलासपुर की ताज़ा खबरें",
-    url: "https://localnewsbilaspur.in",
+    url: "https://localnews.developerbilaspur.in",
   },
 
   event: {
