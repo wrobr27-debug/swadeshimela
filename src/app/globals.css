@@ -1,0 +1,162 @@
+/* ─── Google Fonts ─── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Design Tokens ─── */
+:root {
+  --crimson-900: #0F0202;
+  --crimson-800: #1E0404;
+  --crimson-700: #3B0808;
+  --crimson-600: #5C1010;
+  --crimson-500: #7B1818;
+  --crimson-400: #9B2222;
+  --crimson-300: #B84040;
+
+  --gold-900: #4A3200;
+  --gold-700: #7A5500;
+  --gold-500: #C9A227;
+  --gold-400: #E0B840;
+  --gold-300: #F0CC5A;
+  --gold-200: #F8E090;
+  --gold-100: #FFF3C4;
+
+  --cream: #FFF8E7;
+  --cream-muted: #F0E0C0;
+  --text-on-dark: #FFF8E7;
+  --text-muted: #D4B896;
+
+  --bg-primary: #1A0404;
+  --bg-card: rgba(80, 10, 10, 0.6);
+  --border-gold: rgba(201, 162, 39, 0.4);
+  --border-gold-bright: rgba(201, 162, 39, 0.8);
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--cream);
+  --font-sans: 'Inter', sans-serif;
+  --font-devanagari: 'Noto Sans Devanagari', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/* ─── Base ─── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--crimson-800); }
+::-webkit-scrollbar-thumb { background: var(--gold-500); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-400); }
+
+/* ─── Typography helpers ─── */
+.font-devanagari { font-family: 'Noto Sans Devanagari', sans-serif; }
+.font-serif      { font-family: 'Playfair Display', serif; }
+.font-sans-en    { font-family: 'Inter', sans-serif; }
+
+/* ─── Gold gradient text ─── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-500), var(--gold-300));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Crimson gradient backgrounds ─── */
+.bg-festival {
+  background: radial-gradient(ellipse at top, #3B0808 0%, #1E0404 40%, #0F0202 100%);
+}
+
+.bg-card-festival {
+  background: linear-gradient(135deg, rgba(80,10,10,0.7) 0%, rgba(40,5,5,0.9) 100%);
+  backdrop-filter: blur(12px);
+}
+
+/* ─── Gold border ─── */
+.border-gold { border-color: var(--border-gold); }
+.border-gold-bright { border-color: var(--border-gold-bright); }
+
+/* ─── Ornamental divider ─── */
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--gold-500);
+}
+.ornament-divider::before,
+.ornament-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-500), transparent);
+}
+
+/* ─── Shimmer animation for gold elements ─── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-gold {
+  background: linear-gradient(90deg, var(--gold-500) 0%, var(--gold-200) 50%, var(--gold-500) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Card hover glow ─── */
+.card-glow:hover {
+  box-shadow: 0 0 30px rgba(201, 162, 39, 0.2), 0 8px 32px rgba(0,0,0,0.5);
+}
+
+/* ─── Diya glow pulse ─── */
+@keyframes diya-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+.diya-glow {
+  animation: diya-pulse 2s ease-in-out infinite;
+}
+
+/* ─── Flicker animation for flame motif ─── */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* ─── Entrance animations ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-up { animation: fadeUp 0.7s ease forwards; }
+.animate-fade-in { animation: fadeIn 0.7s ease forwards; }
+
+/* ─── Delay utilities ─── */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
