@@ -21,7 +21,7 @@ export const galleries: Gallery[] = [
     title: "Day 2",
     description: "Photos from Day 2 of Swadeshi Mela 2026.",
     culturalProgram: "अंकित निर्मलकर (गजल गायक) • तरंग बैंड GGDU",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/18iLQ11UgZtaIoTUwNbJCht2YnUItV5Jg?usp=sharing",
   },
   {
     id: "day-03",
