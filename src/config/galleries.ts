@@ -43,7 +43,7 @@ export const galleries: Gallery[] = [
     title: "Day 4",
     description: "Photos from Day 4 of Swadeshi Mela 2026.",
     culturalProgram: "वॉइस ऑफ बिलासपुर",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1cfzlh80FycJz4PmXlXso3NGJYJMZvlwX?usp=sharing",
   },
   {
     id: "day-05",
