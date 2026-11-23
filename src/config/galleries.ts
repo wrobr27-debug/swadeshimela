@@ -32,7 +32,7 @@ export const galleries: Gallery[] = [
     title: "Day 3",
     description: "Photos from Day 3 of Swadeshi Mela 2026.",
     culturalProgram: "समूह नृत्य प्रतियोगिता",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1KYcR7slg_7uq7Ms3kVfgrEnV3gs6g4uf?usp=drive_link",
   },
   {
     id: "day-04",
