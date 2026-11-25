@@ -54,7 +54,7 @@ export const galleries: Gallery[] = [
     title: "Day 5",
     description: "Photos from Day 5 of Swadeshi Mela 2026.",
     culturalProgram: "राधिका पाखी (कथक) • रामायण नेताम (रंग झरना)",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1wVVH3iiEq3uQtoVjJMRnPyA3IIGXjEOQ?usp=sharing",
   },
   {
     id: "day-06",
