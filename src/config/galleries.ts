@@ -65,7 +65,7 @@ export const galleries: Gallery[] = [
     title: "Day 6",
     description: "Photos from Day 6 of Swadeshi Mela 2026.",
     culturalProgram: "प्रांतीय सांस्कृतिक समागम • चिन्हारी ग्रुप • रजनी रजक (लोकगायिका)",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1q04HMWmLPeqZ3Nz3HvYVRMXF498RuSjg?usp=sharing",
   },
   {
     id: "day-07",
