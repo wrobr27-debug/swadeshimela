@@ -76,7 +76,7 @@ export const galleries: Gallery[] = [
     title: "Day 7",
     description: "Photos from Day 7 of Swadeshi Mela 2026.",
     culturalProgram: "भगवत कश्यप (लोक संगम)",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1wI__xBkvivXgTxCA4WnqQTi4XgfDbAHB?usp=sharing",
   },
   {
     id: "all-photos",
