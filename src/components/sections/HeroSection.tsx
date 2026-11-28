@@ -58,7 +58,7 @@ export function HeroSection() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C9A227]" />
           </span>
           <span className="text-[#E0B840] text-xs font-semibold tracking-[0.2em] uppercase">
-            Free Photo Access · Swadeshi Mela 2026
+            Mela Concluded · All Memories Archived 📸
           </span>
         </motion.div>
 

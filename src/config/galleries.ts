@@ -79,6 +79,17 @@ export const galleries: Gallery[] = [
     driveUrl: "https://drive.google.com/drive/folders/1wI__xBkvivXgTxCA4WnqQTi4XgfDbAHB?usp=sharing",
   },
   {
+    id: "day-08",
+    day: "08",
+    startDate: "2026-11-28",
+    date: "28 November 2026",
+    dayName: "शुक्रवार | Friday",
+    title: "Day 8",
+    description: "Bonus photo collection from Swadeshi Mela 2026.",
+    culturalProgram: "विशेष संग्रह",
+    driveUrl: "https://drive.google.com/drive/folders/1Xt9G2xE23Q9G-jkTCg1fiPgVQF_HfbxY?usp=sharing",
+  },
+  {
     id: "all-photos",
     day: "ALL",
     startDate: "2026-11-27",
@@ -87,7 +98,7 @@ export const galleries: Gallery[] = [
     title: "All Photos",
     description: "Complete photo collection from all 7 days of Swadeshi Mela 2026.",
     culturalProgram: "सभी 7 दिनों की यादें",
-    driveUrl: "#",
+    driveUrl: "https://drive.google.com/drive/folders/1Xt9G2xE23Q9G-jkTCg1fiPgVQF_HfbxY?usp=sharing",
     featured: true,
   },
 ];
